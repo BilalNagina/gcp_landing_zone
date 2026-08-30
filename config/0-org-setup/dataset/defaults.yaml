@@ -1,0 +1,92 @@
+﻿# FAST 0-org-setup defaults - DPS practice sandbox
+# Based on fabric v57.0.0 datasets/classic/defaults.yaml
+#
+# yaml-language-server: $schema=../../../fabric/fast/stages/0-org-setup/schemas/defaults.schema.json
+#
+# ============================================================================
+# Values below are LIVE for the practice sandbox org bilalnagina.com.
+# Verified 2026-08-26. Do not point this at dpskw.com.
+# ============================================================================
+
+global:
+  # Use the NEW sandbox billing account. Do NOT use the DPS "Main Billing Account".
+  billing_account: 01C191-EEC543-6C1024
+
+  organization:
+    # Cloud Identity Free tenant, admin user is lab@bilalnagina.com
+    domain: bilalnagina.com
+    id: 287552611155
+    customer_id: C00l7b6x7
+
+observability:
+  project_id: $project_ids:log-0
+  number: $project_numbers:log-0
+
+projects:
+  defaults:
+    # Must be globally unique and under 9 characters. Stamped into every
+    # project ID this stage creates - changing it later means a rebuild.
+    prefix: dpslab
+    locations:
+      bigquery: $locations:primary
+      logging: $locations:primary
+      storage: $locations:primary
+  overrides: {}
+
+context:
+  email_addresses:
+    gcp-organization-admins: gcp-organization-admins@bilalnagina.com
+  iam_principals:
+    # This group MUST exist in Cloud Identity and lab@bilalnagina.com MUST be a
+    # member of it before the first apply, or the apply will lock you out.
+    gcp-organization-admins: group:gcp-organization-admins@bilalnagina.com
+  locations:
+    # me-central1 = Doha, the realistic choice for a Kuwait engagement.
+    # If an apply fails on service availability here, fall back to europe-west1.
+    primary: me-central1
+
+output_files:
+  # Generated provider files and tfvars for downstream stages land here.
+  local_path: ~/fast-config/dpslab
+  storage_bucket: $storage_buckets:iac-0/iac-outputs
+  providers:
+    0-org-setup:
+      bucket: $storage_buckets:iac-0/iac-org-state
+      service_account: $iam_principals:service_accounts/iac-0/iac-org-rw
+    0-org-setup-ro:
+      bucket: $storage_buckets:iac-0/iac-org-state
+      service_account: $iam_principals:service_accounts/iac-0/iac-org-ro
+    1-vpcsc:
+      bucket: $storage_buckets:iac-0/iac-stage-state
+      prefix: 1-vpcsc
+      service_account: $iam_principals:service_accounts/iac-0/iac-vpcsc-rw
+    1-vpcsc-ro:
+      bucket: $storage_buckets:iac-0/iac-stage-state
+      prefix: 1-vpcsc
+      service_account: $iam_principals:service_accounts/iac-0/iac-vpcsc-ro
+    2-networking:
+      bucket: $storage_buckets:iac-0/iac-stage-state
+      prefix: 2-networking
+      service_account: $iam_principals:service_accounts/iac-0/iac-networking-rw
+    2-networking-ro:
+      bucket: $storage_buckets:iac-0/iac-stage-state
+      prefix: 2-networking
+      service_account: $iam_principals:service_accounts/iac-0/iac-networking-ro
+    2-security:
+      bucket: $storage_buckets:iac-0/iac-stage-state
+      prefix: 2-security
+      service_account: $iam_principals:service_accounts/iac-0/iac-security-rw
+    2-security-ro:
+      bucket: $storage_buckets:iac-0/iac-stage-state
+      prefix: 2-security
+      service_account: $iam_principals:service_accounts/iac-0/iac-security-ro
+    2-project-factory:
+      bucket: $storage_buckets:iac-0/iac-stage-state
+      prefix: 2-project-factory
+      service_account: $iam_principals:service_accounts/iac-0/iac-pf-rw
+    2-project-factory-ro:
+      bucket: $storage_buckets:iac-0/iac-stage-state
+      prefix: 2-project-factory
+      service_account: $iam_principals:service_accounts/iac-0/iac-pf-ro
+
+
