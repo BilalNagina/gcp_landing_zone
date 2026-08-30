@@ -41,3 +41,6 @@ values:
         - $iam_principals:service_accounts/iac-0/iac-networking-ro
         - $iam_principals:service_accounts/iac-0/iac-security-ro
         - $iam_principals:service_accounts/iac-0/iac-pf-ro
+
+# CI/CD test comment - added to trigger the first Actions run.
+# Safe to remove after verifying Workload Identity Federation works.
