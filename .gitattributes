@@ -1,0 +1,5 @@
+# Normalize all text to LF in the repository. FAST must run on Linux/WSL2,
+# and CRLF would otherwise make every diff unreadable after a Windows edit.
+* text=auto eol=lf
+*.png binary
+*.pdf binary

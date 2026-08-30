@@ -7,6 +7,11 @@
 
 factories_config = {
   dataset = "../../../../config/0-org-setup/dataset"
+  paths = {
+    # Without this, cicd.yaml is ignored and no pipeline is generated.
+    # Path is relative to the dataset directory above.
+    cicd_workflows = "cicd.yaml"
+  }
 }
 
 # Google applies a set of "secure by default" org policies to newly created
